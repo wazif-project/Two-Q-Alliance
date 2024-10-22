@@ -14,10 +14,10 @@
                 <div class="card-body">
                     <div class="text-center mb-4">
                         @if ($company->logo)
-                            <img src="{{ Storage::url($company->logo) }}" 
-                                 alt="{{ $company->name }}" 
-                                 class="img-thumbnail"
-                                 style="max-height: 150px;">
+                            <img src="{{ asset(str_replace('public/', '', $company->logo)) }}" 
+                                alt="{{ $company->name }}" 
+                                class="img-thumbnail"
+                                style="max-height: 150px;">
                         @endif
                     </div>
 

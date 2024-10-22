@@ -68,10 +68,11 @@
                             <label for="logo" class="form-label">Logo (minimum 100x100)</label>
                             @if($company->logo)
                                 <div class="mb-2">
-                                    <img src="{{ Storage::url($company->logo) }}" 
-                                         alt="Current Logo" 
-                                         class="img-thumbnail" 
-                                         style="max-height: 100px;">
+                                    <img src="{{ asset(str_replace('public/', '', $company->logo)) }}" 
+                                                 alt="Current Logo" 
+                                                 class="img-thumbnail me-3" 
+                                                 style="max-height: 100px;">
+                                            <span class="text-muted">{{ basename($company->logo) }}</span>
                                 </div>
                             @endif
                             <input type="file" 
@@ -86,7 +87,7 @@
 
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary">Update Company</button>
-                            <a href="{{ route('companies.index') }}" class="btn btn-link">Cancel</a>
+                            <a href="{{ route('companies.index') }}" class="btn btn-primary">Cancel</a>
                         </div>
                     </form>
                 </div>

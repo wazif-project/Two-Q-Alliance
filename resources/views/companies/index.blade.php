@@ -34,9 +34,9 @@
                                     <tr>
                                         <td>
                                             @if ($company->logo)
-                                                <img src="{{ Storage::url($company->logo) }}" 
-                                                     alt="{{ $company->name }}" 
-                                                     style="max-width: 50px;">
+                                                <img src="{{ asset(str_replace('public/', '', $company->logo)) }}" 
+                                                    alt="{{ $company->name }}" 
+                                                    style="max-width: 50px;">
                                             @endif
                                         </td>
                                         <td>{{ $company->name }}</td>

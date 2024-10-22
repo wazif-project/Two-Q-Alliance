@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -20,7 +18,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the companies.
      *
      * @return \Illuminate\Http\Response
      */
@@ -31,7 +29,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new company.
      *
      * @return \Illuminate\Http\Response
      */
@@ -40,13 +38,8 @@ class CompanyController extends Controller
         return view('companies.create');
     }
 
-    public function show(Company $company)
-    {
-        return view('companies.show', compact('company'));
-    }
-
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created company in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -61,8 +54,10 @@ class CompanyController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
-            $validated['logo'] = $path;
+            $file = $request->file('logo');
+            $filename = 'public/' . $file->getClientOriginalName();
+            $file->move(base_path('public'), $filename);
+            $validated['logo'] = $filename;
         }
 
         Company::create($validated);
@@ -72,7 +67,18 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified company.
+     *
+     * @param  \App\Models\Company  $company
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Company $company)
+    {
+        return view('companies.show', compact('company'));
+    }
+
+    /**
+     * Show the form for editing the specified company.
      *
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
@@ -83,7 +89,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified company in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Company  $company
@@ -99,12 +105,15 @@ class CompanyController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            // Delete old logo
-            if ($company->logo) {
-                Storage::disk('public')->delete($company->logo);
+            // Delete old logo if it exists
+            if ($company->logo && file_exists(base_path($company->logo))) {
+                unlink(base_path($company->logo));
             }
-            $path = $request->file('logo')->store('logos', 'public');
-            $validated['logo'] = $path;
+            
+            $file = $request->file('logo');
+            $filename = 'public/' . $file->getClientOriginalName();
+            $file->move(base_path('public'), $filename);
+            $validated['logo'] = $filename;
         }
 
         $company->update($validated);
@@ -114,16 +123,18 @@ class CompanyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified company from storage.
      *
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
     public function destroy(Company $company)
     {
-        if ($company->logo) {
-            Storage::disk('public')->delete($company->logo);
+        // Delete logo file if it exists
+        if ($company->logo && file_exists(base_path($company->logo))) {
+            unlink(base_path($company->logo));
         }
+        
         $company->delete();
 
         return redirect()->route('companies.index')

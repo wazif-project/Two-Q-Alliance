@@ -13,12 +13,15 @@ class CompanySeeder extends Seeder
      */
     public function run(): void
     {
+        // Clear existing companies
+        Company::truncate();
+
         // First company - Maxis Communications
         Company::create([
             'name' => 'Maxis Communications',
             'email' => 'Alex@maxis.com',
             'website' => 'https://www.maxis.com.my/en/home/',
-            'logo' => 'logos/maxis-logo.png',
+            'logo' => 'public/maxis-logo.png',
             'created_at' => Carbon::parse('2024-10-22 09:49:00'),
             'updated_at' => Carbon::parse('2024-10-22 09:49:00')
         ]);
@@ -28,7 +31,7 @@ class CompanySeeder extends Seeder
             'name' => 'Two Q Alliance',
             'email' => 'wahida@2q.my',
             'website' => 'https://www.2q.my/',
-            'logo' => 'logos/2q-logo.png',
+            'logo' => 'public/2q-logo.png',
             'created_at' => now(),
             'updated_at' => now()
         ]);
