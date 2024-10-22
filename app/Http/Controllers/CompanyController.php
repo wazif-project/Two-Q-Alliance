@@ -40,6 +40,11 @@ class CompanyController extends Controller
         return view('companies.create');
     }
 
+    public function show(Company $company)
+    {
+        return view('companies.show', compact('company'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
